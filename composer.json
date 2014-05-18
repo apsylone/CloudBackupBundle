@@ -22,9 +22,9 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.1",
-        "knplabs/knp-gaufrette-bundle": "~0.1.7"
+        "knplabs/knp-gaufrette-bundle": "~0.1.7",
+        "hakre/dropbox-uploader": "dev-development"
     },
-
     "require-dev": {
         "symfony/symfony": "v2.3.1"
     },

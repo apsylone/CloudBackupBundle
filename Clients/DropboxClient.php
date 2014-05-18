@@ -3,7 +3,7 @@ namespace Dizda\CloudBackupBundle\Clients;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-use Dizda\CloudBackupBundle\Clients\DropboxUploader;
+use JakaJancar\DropboxUploader;
 
 
 /**
