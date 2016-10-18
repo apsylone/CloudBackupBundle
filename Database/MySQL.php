@@ -15,6 +15,7 @@ class MySQL extends BaseDatabase
     private $allDatabases;
     private $database;
     private $auth = '';
+    private $restoreAuth = '';
     private $fileName;
     private $ignoreTables = '';
 
@@ -24,9 +25,9 @@ class MySQL extends BaseDatabase
      * @param array  $params
      * @param string $basePath
      */
-    public function __construct($params, $basePath)
+    public function __construct($params, $basePath, $restoreFolder)
     {
-        parent::__construct($basePath);
+        parent::__construct($basePath, $restoreFolder);
 
         $params = $params['mysql'];
         $this->allDatabases = $params['all_databases'];
@@ -58,9 +59,11 @@ class MySQL extends BaseDatabase
         /* if user is set, we add authentification */
         if ($params['db_user']) {
             $this->auth = sprintf('-u%s', $params['db_user']);
+            $this->restoreAuth = $this->auth;
 
             if ($params['db_password']) {
                 $this->auth = sprintf("--host=\"%s\" --port=\"%d\" --user=\"%s\" --password=\"%s\"", $params['db_host'], $params['db_port'], $params['db_user'], $params['db_password']);
+                $this->restoreAuth = sprintf("--user=\"%s\" --password=\"%s\"", $params['db_user'], $params['db_password']);
             }
         }
     }
@@ -77,6 +80,14 @@ class MySQL extends BaseDatabase
     /**
      * {@inheritdoc}
      */
+    public function restore()
+    {
+        $this->execute($this->getRestoreCommand());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getCommand()
     {
         return sprintf('mysqldump %s %s %s > %s',
@@ -84,6 +95,19 @@ class MySQL extends BaseDatabase
             $this->database,
             $this->ignoreTables,
             ProcessUtils::escapeArgument($this->dataPath.$this->fileName)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRestoreCommand()
+    {
+        return sprintf('mysql %s %s < %s/mysql/%s',
+            $this->restoreAuth,
+            $this->database,
+            $this->restoreFolder,
+            ProcessUtils::escapeArgument($this->fileName)
         );
     }
 

@@ -70,4 +70,9 @@ class ClientManager
             throw $exception;
         }
     }
+
+    public function download()
+    {
+        return $this->children[0]->download();
+    }
 }

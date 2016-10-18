@@ -14,6 +14,17 @@ class GaufretteClient implements ClientInterface
 {
     private $filesystems;
 
+    private $restoreFolder;
+
+    /**
+     * @param string $restoreFolder
+     */
+    public function __construct($restoreFolder)
+    {
+        $this->restoreFolder = $restoreFolder;
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -36,10 +47,33 @@ class GaufretteClient implements ClientInterface
     }
 
     /**
+     * @return Filesystem
+     */
+    public function getFirstFilesystem()
+    {
+        return $this->filesystems[0];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
     {
         return 'Gaufrette';
+    }
+
+    public function download()
+    {
+        $fileSystem = $this->getFirstFilesystem();
+
+        $files = $fileSystem->keys();
+        $fileName = end($files);
+
+        $content = $fileSystem->get($fileName)->getContent();
+        $splFile = new \SplFileInfo($this->restoreFolder . $fileName);
+
+        file_put_contents($splFile->getPathname(), $content);
+
+        return $splFile;
     }
 }

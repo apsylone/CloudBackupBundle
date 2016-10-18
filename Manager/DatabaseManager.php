@@ -52,4 +52,9 @@ class DatabaseManager
             $child->dump();
         }
     }
+
+    public function restore()
+    {
+        $this->children[0]->restore();
+    }
 }

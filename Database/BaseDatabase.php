@@ -16,15 +16,17 @@ abstract class BaseDatabase implements DatabaseInterface
     protected $dataPath;
     protected $filesystem;
     protected $timeout;
+    protected $restoreFolder;
 
     /**
      * Get SF2 Filesystem.
      *
      * @param string $basePath
      */
-    public function __construct($basePath)
+    public function __construct($basePath, $restoreFolder = null)
     {
         $this->dataPath = $basePath.static::DB_PATH.'/';
+        $this->restoreFolder = $restoreFolder;
         $this->filesystem = new Filesystem();
         $this->timeout = 300;
     }

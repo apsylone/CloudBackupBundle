@@ -34,6 +34,14 @@ class ZipProcessor extends BaseProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
+    public function getUncompressCommand($basePath, $fileName, $uncompressPath)
+    {
+        return sprintf('cd %s && unzip -o %s -d %s', $basePath, $fileName, $uncompressPath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'Zip';
